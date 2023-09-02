@@ -1,62 +1,38 @@
 ---
-title: Quick Start
+title: Terminology
 ---
 
-## Creating a project
+For clarity on technical vs user-facing terms in Commune.
 
-Run one of the following command  
-Depend on what package manager you are using
+### Spaces
 
-@install-pkg(@sveltepress,create)
+Every new community instance in Commune starts out as a new `space`, exactly equivalent to [Matrix Spaces](https://element.io/blog/spaces-the-next-frontier/). Unlike Matrix/Element however which allows for rooms (channels) to be created without a `space` container, Commune *requires* each new community to begin with a `space`containing at minimum one channel. We believe this is more in line with conventional group-messaging UX, such as Discord's 'servers' and Slack's 'workspaces'.
 
-:::tip[PNPM first]
-Use pnpm as much as possible. It respects package version more than npm.
-:::
+### Channels
 
-## Adding to an existing sveltekit project
+`channels` in Commune are the technical equivalent of `[rooms](https://spec.matrix.org/v1.8/rooms/)` in Matrix.
 
-### Install vite plugin package
+We opted for the `channel` term because of its mainstream use in chat platforms like [Slack](https://slack.com/features/channels), [Discord](https://discord.com/developers/docs/resources/channel) and [Microsoft Teams](https://learn.microsoft.com/en-us/microsoftteams/teams-channels-overview).
 
-@install-pkg(@sveltepress/vite)
+Similar concepts:
 
-### Replace `sveltekit` plugin in vite.config.(js|ts)
+- Fediverse: [Groups](https://codeberg.org/fediverse/fep/src/branch/main/fep/1b12/fep-1b12.md) 
+Partial compatibility is planned, e.g. by enabling an Announcements category to be federated.
 
-```js title="vite.config.(js|ts)"
-import { defineConfig } from 'vite'
+- Discourse: [Categories](https://meta.discourse.org/t/create-a-category-in-discourse/197224)
+Effectively the same as channels, except Discourse treats topics-board channels and chat-room channels as two separate containers, whereas in Commune each channel contains and is capable of both.
 
-import { sveltekit } from '@sveltejs/kit' // [svp! --]
+### Boards and view-modes
 
-import { sveltepress } from '@sveltepress/vite' // [svp! ++]
+`boards` are a novel concept in Commune compared to conventional group-messaging designs. Every channel in Commune can be viewed in two different modes:
 
-const config = defineConfig({
-  plugins: [
-    sveltekit(), // [svp! --]
-    sveltepress(), // [svp! ++]
-  ],
-})
+- Chat-view
+- Board-view
 
-export default config
-```
+Chat-view works like any other group chat. Board-view on the other hand presents a threads-centric view of the channel, in the tabulated style of an "[internet forum or message board](https://en.wikipedia.org/wiki/Internet_forum)".
 
-### Add `'.md'` extension to the `extensions` options in your svelte.config.js
+Channels intended strictly for asynchronous discourse in the form of threads can opt to disable the chat-view altogether and only allow thread posting.
 
-```js title="svelte.config.js"
-import adapter from '@sveltejs/adapter-static'
-import { vitePreprocess } from '@sveltejs/kit/vite'
+### Threads
 
-/**
- * @type {import('@sveltejs/kit').Config}
- */
-const config = {
-  extensions: ['.svelte'], // [svp! --]
-  extensions: ['.svelte', '.md'], // add .md here // [svp! ++]
-  preprocess: [vitePreprocess()],
-  kit: {
-    adapter: adapter({
-      pages: 'dist',
-    }),
-  },
-}
-
-export default config
-```
+`threads` in Commune are the same as `[threads](https://spec.matrix.org/v1.8/client-server-api/#threading)` in Matrix. However, Commune makes `threads` web-readable and thus SEO-friendly.
